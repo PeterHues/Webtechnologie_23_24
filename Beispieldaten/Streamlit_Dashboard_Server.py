@@ -362,6 +362,5 @@ with col_PET_Special3:
     st.subheader("Umsatzentwicklung PET Special-PET Ebene PG2 pro Region")
     st.plotly_chart(fig_pie_PET_Special, use_container_width=True)
 
-st.write("Hallo. Das ist ein Text")
 
 #%%
