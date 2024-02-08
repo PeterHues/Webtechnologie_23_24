@@ -163,7 +163,21 @@ with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
     # Get the xlsxwriter objects from the dataframe writer object
     #The Workbook and Worksheet objects can be used to access other XlsxWriter feature
     workbook = writer.book
-    worksheet = writer.sheets['Tabelle1']
+    worksheet = writer.sheets["Tabelle1"]
+
+    #get dimensions of dataframe
+    (max_row, max_col) = df_selection.shape
+
+    #create list of column-headers to use in add_table()
+    column_settings = [{"header": column} for column in df_selection.columns]
+
+    #add excel table structure. Pandas will add the data
+    #Aufbau des add_table()-Befehls: Startzeile, Startspalte, Endzeile, Endspalte
+    worksheet.add_table(len(filterkriterien)+3,0, max_row+len(filterkriterien)+3, max_col-1, {"columns": column_settings})
+
+    #make columns wider for clarity
+    #worksheet.set_column(0, max_col-1, 12)
+    worksheet.autofit()
 
 
 
