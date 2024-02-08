@@ -136,16 +136,44 @@ st.dataframe(
 col1, col2 = st.columns([0.9,0.1])
 buffer = io.BytesIO()
 
+filterkriterien = pd.DataFrame(data={
+    "Filter": ["Produktgruppe 1", "Produktgruppe 2", "Geschäftsjahr", "Region", "Materialnummer", "Land Kunde"],
+    "Gesetzte Werte": [str(sorted(df_selection["Produktgruppe1"].unique(), reverse=False)), 
+                       str(sorted(df_selection["Produktgruppe2"].unique(), reverse=False)), 
+                       str(sorted(df_selection["Geschaeftsjahr"].unique(), reverse=True)), 
+                       str(sorted(df_selection["Region_Kunde"].unique(), reverse=False)),
+                       str(filter_material),
+                       str(filter_country)]
+})
+
+i = 0
+while(i < len(filterkriterien)):
+    if(filterkriterien.iloc[i, 1]== ""):
+        filterkriterien.iloc[i, 1] = "-"
+    i = i+1
+
+
 # Create a Pandas Excel writer using XlsxWriter as the engine.
 with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
-    # Write each dataframe to a different worksheet.
-    df_selection.to_excel(writer, sheet_name='Tabelle1', index=False)
+
+    filterkriterien.to_excel(writer, sheet_name='Tabelle1', startrow=0, index=False)
+    #Convert the dataframe to an XlsxWriter Excel object
+    df_selection.to_excel(writer, sheet_name='Tabelle1', startrow=len(filterkriterien)+3, index=False)
+
+    # Get the xlsxwriter objects from the dataframe writer object
+    #The Workbook and Worksheet objects can be used to access other XlsxWriter feature
+    workbook = writer.book
+    worksheet = writer.sheets['Tabelle1']
+
+
+
+
 
 with col2:
     st.download_button(
         label=":inbox_tray: Download Excel workbook",
         data=buffer,
-        file_name="workbook_test.xlsx",
+        file_name="Absatzdaten.xlsx",
         mime="application/vnd.ms-excel",
         use_container_width=True
     )
