@@ -61,32 +61,32 @@ st.markdown("---")
 #%%
 # ---- SIDEBAR ----
 st.sidebar.header("Bitte Hier Filtern:")
-PG1 = st.sidebar.multiselect(
+pg1 = st.sidebar.multiselect(
     "Produktgruppe 1 wählen",
     options=sorted(working_data["Produktgruppe1"].unique(), reverse=False),
     default=sorted(working_data["Produktgruppe1"].unique(), reverse=False)
 )
 
-PG2 = st.sidebar.multiselect(
+pg2 = st.sidebar.multiselect(
     "Produktgruppe 2 wählen",
     options=sorted(working_data["Produktgruppe2"].unique(), reverse=False),
     default=sorted(working_data["Produktgruppe2"].unique(), reverse=False)
 )
 
-JAHR_FILTERED = st.sidebar.multiselect(
+jahr_gefiltert = st.sidebar.multiselect(
     "Bitte Jahr wählen:",
     options=sorted(working_data["Geschaeftsjahr"].unique(), reverse=True),
     default=sorted(working_data["Geschaeftsjahr"].unique(), reverse=True)
 )
 
-REGION = st.sidebar.multiselect(
+region = st.sidebar.multiselect(
     "Bitte Region wählen:",
     options=sorted(working_data["Region_Kunde"].unique(), reverse=False),
     default=sorted(working_data["Region_Kunde"].unique(), reverse=False)
 )
 
 df_selection =working_data.query(
-    "Produktgruppe1 == @PG1 & Produktgruppe2 == @PG2 & Geschaeftsjahr == @JAHR_FILTERED & Region_Kunde == @REGION"
+    "Produktgruppe1 == @pg1 & Produktgruppe2 == @pg2 & Geschaeftsjahr == @jahr_gefiltert & Region_Kunde == @region"
 )
 
 #Spalten Container fuer subheader
