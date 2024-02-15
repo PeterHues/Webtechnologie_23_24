@@ -173,8 +173,24 @@ with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
 
     #add excel table structure. Pandas will add the data
     #Aufbau des add_table()-Befehls: Startzeile, Startspalte, Endzeile, Endspalte
-    worksheet.add_table(len(filterkriterien)+3,0, max_row+len(filterkriterien)+3, max_col-1, {"columns": column_settings})
+    worksheet.add_table(len(filterkriterien)+3,0, max_row+len(filterkriterien)+3, max_col-1, {"columns": column_settings,
+                                                                                              "style": 'Table Style Light 1'})
+    
+    #das Format mit den Rahmenlinien erstellen
+    rahmenlinien = workbook.add_format({'border': 1})
 
+    #das Format iterativ mit den Werten aus dem Dataframe filterkriterien in das Excel-Tabellenblatt schreiben
+    i = 0
+    while i < len(filterkriterien):
+        worksheet.write(i+1, 0, filterkriterien.iloc[i,0], rahmenlinien)
+        worksheet.write(i+1, 1, filterkriterien.iloc[i,1], rahmenlinien)
+        i = i+1
+
+
+    worksheet.hide_gridlines(2)
+    #border_fmt = workbook.add_format({'bottom':1, 'top':1, 'left':1, 'right':1})
+    #worksheet.conditional_format(xlsxwriter.utility.xl_range(0, 0, len(filterkriterien), len(filterkriterien.columns)-1), {'type': 'no_errors', 'format': border_fmt})
+    
     #make columns wider for clarity
     #worksheet.set_column(0, max_col-1, 12)
     worksheet.autofit()
