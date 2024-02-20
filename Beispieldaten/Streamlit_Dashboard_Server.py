@@ -136,10 +136,6 @@ st.dataframe(
 col1, col2 = st.columns([0.9,0.1])
 buffer = io.BytesIO()
 
-#Die Filterkriterien der Exceltabelle hinzufuegen
-# ---- Schritt 1: Dataframe filterkriterien mit allen Filtern erstellen
-# ---- Schritt 2: Die gesetzten Filterkriterien werden aus dem aktiven Dataframe df_selection gezogen.
-#
 filterkriterien = pd.DataFrame(data={
     "Filter": ["Produktgruppe 1", "Produktgruppe 2", "Geschäftsjahr", "Region", "Materialnummer", "Land Kunde"],
     "Gesetzte Werte": [str(sorted(df_selection["Produktgruppe1"].unique(), reverse=False)), 
@@ -150,7 +146,6 @@ filterkriterien = pd.DataFrame(data={
                        str(filter_country)]
 })
 
-# ---- Schritt 3: falls ein Filter nicht gesetzt ist, soll er den Eintrag "-" erhalten
 i = 0
 while(i < len(filterkriterien)):
     if(filterkriterien.iloc[i, 1]== ""):
@@ -178,11 +173,27 @@ with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
 
     #add excel table structure. Pandas will add the data
     #Aufbau des add_table()-Befehls: Startzeile, Startspalte, Endzeile, Endspalte
-    worksheet.add_table(len(filterkriterien)+3,0, max_row+len(filterkriterien)+3, max_col-1, {"columns": column_settings})
+    worksheet.add_table(len(filterkriterien)+3,0, max_row+len(filterkriterien)+3, max_col-1, {"columns": column_settings,
+                                                                                              "style": 'Table Style Light 1'})
+    
+    #das Format mit den Rahmenlinien erstellen
+    rahmenlinien = workbook.add_format({'border': 1})
 
-    #make columns wider for clarity
-    #worksheet.set_column(0, max_col-1, 12)
+    #das Format iterativ mit den Werten aus dem Dataframe filterkriterien in das Excel-Tabellenblatt schreiben
+    i = 0
+    while i < len(filterkriterien):
+        worksheet.write(i+1, 0, filterkriterien.iloc[i,0], rahmenlinien)
+        worksheet.write(i+1, 1, filterkriterien.iloc[i,1], rahmenlinien)
+        i = i+1
+
+
+    worksheet.hide_gridlines(2)
+
     worksheet.autofit()
+
+
+
+
 
 with col2:
     st.download_button(
@@ -211,9 +222,9 @@ color_umsatz = '#fdae61'  # Pfirsich
 
 
 #Funktion fuer Balkendiagramme erstellen
-def Balkendiagramme_erstellen(df):
+def Saeulendiagramme_erstellen(df):
 
-    balkendiagramm = px.bar(df, 
+    Saeulendiagramm = px.bar(df, 
         x='Geschaeftsjahr', 
         y=['Absatz', 'Umsatz'], 
         color_discrete_sequence=[color_absatz, color_umsatz],
@@ -221,7 +232,7 @@ def Balkendiagramme_erstellen(df):
         barmode='group',
         template="plotly_white") 
     
-    balkendiagramm.update_layout(
+    Saeulendiagramm.update_layout(
         plot_bgcolor="rgba(0,0,0,0)",
         xaxis=(dict(showgrid=False)),
         legend=dict(
@@ -233,7 +244,7 @@ def Balkendiagramme_erstellen(df):
         )   
     )
 
-    return balkendiagramm
+    return Saeulendiagramm
 
 
 #Funktion fuer Liniendiagramme erstellen
@@ -259,8 +270,8 @@ def Tortendiagramm_erstellen(df):
 with col_ISO_MDI1:
     balkendiagramm_ISO_MDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '11'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
 
-    # Balkendiagramm erstellen
-    fig_ISO_MDI = Balkendiagramme_erstellen(balkendiagramm_ISO_MDI)
+    # Saeulendiagramm erstellen
+    fig_ISO_MDI = Saeulendiagramme_erstellen(balkendiagramm_ISO_MDI)
 
     st.subheader("Absatz- und Umsatzentwicklung ISO MDI Ebene PG2")
     st.plotly_chart(fig_ISO_MDI, use_container_width=True)
@@ -289,7 +300,7 @@ with col_ISO_MDI3:
 with col_ISO_TDI1:
     balkendiagramm_ISO_TDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '21'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
 
-    fig_ISO_TDI = Balkendiagramme_erstellen(balkendiagramm_ISO_TDI)
+    fig_ISO_TDI = Saeulendiagramme_erstellen(balkendiagramm_ISO_TDI)
 
     st.subheader("Absatz- und Umsatzentwicklung ISO TDI Ebene PG2")
     st.plotly_chart(fig_ISO_TDI, use_container_width=True)
@@ -321,7 +332,7 @@ with col_ISO_TDI3:
 with col_PET_PO1:
     balkendiagramm_PET_PO = df_selection.query("Produktgruppe1 == '04' & Produktgruppe2 == '41'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
 
-    fig_PET_PO = Balkendiagramme_erstellen(balkendiagramm_PET_PO)
+    fig_PET_PO = Saeulendiagramme_erstellen(balkendiagramm_PET_PO)
 
     st.subheader("Absatz- und Umsatzentwicklung PET PO Ebene PG2")
     st.plotly_chart(fig_PET_PO, use_container_width=True)
@@ -353,7 +364,7 @@ with col_PET_HP1:
     balkendiagramm_PET_HP = df_selection.query("Produktgruppe1 == '04' & Produktgruppe2 == '43'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
 
     # Balkendiagramm erstellen
-    fig_PET_HP = Balkendiagramme_erstellen(balkendiagramm_PET_HP)
+    fig_PET_HP = Saeulendiagramme_erstellen(balkendiagramm_PET_HP)
 
     st.subheader("Absatz- und Umsatzentwicklung PET HighPerformance Ebene PG2")
     st.plotly_chart(fig_PET_HP, use_container_width=True)
@@ -382,7 +393,7 @@ with col_PET_HP3:
 
 with col_PET_Special1:
     balkendiagramm_PET_Special = df_selection.query("Produktgruppe1 == '04' & Produktgruppe2 == '49'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
-    fig_PET_Special = Balkendiagramme_erstellen(balkendiagramm_PET_Special)
+    fig_PET_Special = Saeulendiagramme_erstellen(balkendiagramm_PET_Special)
 
     st.subheader("Absatz- und Umsatzentwicklung PET Special-PET Ebene PG2")
     st.plotly_chart(fig_PET_Special, use_container_width=True)
@@ -404,6 +415,5 @@ with col_PET_Special3:
 
     st.subheader("Umsatzentwicklung PET Special-PET Ebene PG2 pro Region")
     st.plotly_chart(fig_pie_PET_Special, use_container_width=True)
-
 
 #%%
