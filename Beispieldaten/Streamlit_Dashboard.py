@@ -258,7 +258,7 @@ def Liniendiagramme_erstellen(df):
 def Tortendiagramm_erstellen(df):
     
     tortendiagramm = px.pie(labels=df["Region_Kunde"], 
-                                    values=df["Umsatz"], 
+                                    values=df["Absatz"], 
                                     names=df["Region_Kunde"],
                                     #color=['#9ecae1', '#fdae61', '#a1d99b', '#ffe34d', '#d73027']
                 )
@@ -285,12 +285,12 @@ with col_ISO_MDI2:
     st.plotly_chart(fig_line_ISO_MDI, use_container_width=True)
 
 with col_ISO_MDI3:
-    pie_chart_regionen_ISO_MDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '11'").groupby(["Region_Kunde"], as_index=False)[["Umsatz"]].sum()
+    pie_chart_regionen_ISO_MDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '11'").groupby(["Region_Kunde"], as_index=False)[["Absatz"]].sum()
 
     fig_pie_ISO_MDI = Tortendiagramm_erstellen(pie_chart_regionen_ISO_MDI)
 
 
-    st.subheader("Umsatzentwicklung ISO MDI Ebene PG2 pro Region")
+    st.subheader("Absatzverteilung ISO MDI Ebene PG2 pro Region")
     st.plotly_chart(fig_pie_ISO_MDI, use_container_width=True)
 
 
@@ -315,12 +315,12 @@ with col_ISO_TDI2:
     st.plotly_chart(fig_line_ISO_TDI, use_container_width=True)
 
 with col_ISO_TDI3:
-    pie_chart_regionen_ISO_TDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '21'").groupby(["Region_Kunde"], as_index=False)[["Umsatz"]].sum()
+    pie_chart_regionen_ISO_TDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '21'").groupby(["Region_Kunde"], as_index=False)[["Absatz"]].sum()
 
     fig_pie_ISO_TDI = Tortendiagramm_erstellen(pie_chart_regionen_ISO_TDI)
 
 
-    st.subheader("Umsatzentwicklung ISO TDI Ebene PG2 pro Region")
+    st.subheader("Absatzverteilung ISO TDI Ebene PG2 pro Region")
     st.plotly_chart(fig_pie_ISO_TDI, use_container_width=True)
 
 
@@ -347,12 +347,12 @@ with col_PET_PO2:
     st.plotly_chart(fig_line_PET_PO, use_container_width=True)
 
 with col_PET_PO3:
-    pie_chart_regionen_PET_PO = df_selection.query("Produktgruppe1 == '04' & Produktgruppe2 == '41'").groupby(["Region_Kunde"], as_index=False)[["Umsatz"]].sum()
+    pie_chart_regionen_PET_PO = df_selection.query("Produktgruppe1 == '04' & Produktgruppe2 == '41'").groupby(["Region_Kunde"], as_index=False)[["Absatz"]].sum()
 
     fig_pie_PET_PO = Tortendiagramm_erstellen(pie_chart_regionen_PET_PO)
 
 
-    st.subheader("Umsatzentwicklung PET PO Ebene PG2 pro Region")
+    st.subheader("Absatzverteilung PET PO Ebene PG2 pro Region")
     st.plotly_chart(fig_pie_PET_PO, use_container_width=True)
 
 
@@ -378,12 +378,12 @@ with col_PET_HP2:
     st.plotly_chart(fig_line_PET_HP, use_container_width=True)
 
 with col_PET_HP3:
-    pie_chart_regionen_PET_HP = df_selection.query("Produktgruppe1 == '04' & Produktgruppe2 == '43'").groupby(["Region_Kunde"], as_index=False)[["Umsatz"]].sum()
+    pie_chart_regionen_PET_HP = df_selection.query("Produktgruppe1 == '04' & Produktgruppe2 == '43'").groupby(["Region_Kunde"], as_index=False)[["Absatz"]].sum()
 
     fig_pie_PET_HP = Tortendiagramm_erstellen(pie_chart_regionen_PET_HP)
 
 
-    st.subheader("Umsatzentwicklung PET HighPerformance Ebene PG2 pro Region")
+    st.subheader("Absatzverteilung PET HighPerformance Ebene PG2 pro Region")
     st.plotly_chart(fig_pie_PET_HP, use_container_width=True)
 
 
@@ -408,12 +408,12 @@ with col_PET_Special2:
     st.plotly_chart(fig_line_PET_Special, use_container_width=True)
 
 with col_PET_Special3:
-    pie_chart_regionen_PET_Special = df_selection.query("Produktgruppe1 == '04' & Produktgruppe2 == '49'").groupby(["Region_Kunde"], as_index=False)[["Umsatz"]].sum()
+    pie_chart_regionen_PET_Special = df_selection.query("Produktgruppe1 == '04' & Produktgruppe2 == '49'").groupby(["Region_Kunde"], as_index=False)[["Absatz"]].sum()
 
     fig_pie_PET_Special = Tortendiagramm_erstellen(pie_chart_regionen_PET_Special)
 
 
-    st.subheader("Umsatzentwicklung PET Special-PET Ebene PG2 pro Region")
+    st.subheader("Absatzverteilung PET Special-PET Ebene PG2 pro Region")
     st.plotly_chart(fig_pie_PET_Special, use_container_width=True)
 
 #%%
