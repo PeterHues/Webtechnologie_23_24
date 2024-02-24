@@ -138,10 +138,10 @@ buffer = io.BytesIO()
 
 filterkriterien = pd.DataFrame(data={
     "Filter": ["Produktgruppe 1", "Produktgruppe 2", "Geschäftsjahr", "Region", "Materialnummer", "Land Kunde"],
-    "Gesetzte Werte": [str(sorted(df_selection["Produktgruppe1"].unique(), reverse=False)), 
+    "Gesetzte Werte": [pg1, 
                        str(sorted(df_selection["Produktgruppe2"].unique(), reverse=False)), 
-                       str(sorted(df_selection["Geschaeftsjahr"].unique(), reverse=True)), 
-                       str(sorted(df_selection["Region_Kunde"].unique(), reverse=False)),
+                       jahr_gefiltert, 
+                       region,
                        str(filter_material),
                        str(filter_country)]
 })
