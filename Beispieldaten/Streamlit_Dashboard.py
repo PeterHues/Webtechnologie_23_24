@@ -76,8 +76,9 @@ pg2 = st.sidebar.multiselect(
 jahr_gefiltert = st.sidebar.multiselect(
     "Bitte Jahr wählen:",
     options=sorted(working_data["Geschaeftsjahr"].unique(), reverse=True),
-    default=sorted(working_data["Geschaeftsjahr"].unique(), reverse=True)
+    default=sorted(working_data["Geschaeftsjahr"].unique(), reverse=True)[:3]
 )
+
 
 region = st.sidebar.multiselect(
     "Bitte Region wählen:",
