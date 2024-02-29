@@ -74,7 +74,7 @@ pg2 = st.sidebar.multiselect(
 )
 
 jahr_gefiltert = st.sidebar.multiselect(
-    "Bitte Geschäftsjahr wählen:",
+    "Bitte Jahr wählen:",
     options=sorted(working_data["Geschaeftsjahr"].unique(), reverse=True),
     default=sorted(working_data["Geschaeftsjahr"].unique(), reverse=True)[:3]
 )
@@ -206,9 +206,9 @@ with col2:
 
 st.markdown("---")
 
-col_ISO_MDI1, col_ISO_MDI2, col_ISO_MDI3 = st.columns(3)
+col_Plastic_AS1, col_Plastic_AS2, col_Plastic_AS3 = st.columns(3)
 
-col_ISO_TDI1, col_ISO_TDI2, col_ISO_TDI3 = st.columns(3)
+col_Plastic_ABS_Plastic1, col_Plastic_ABS_Plastic2, col_Plastic_ABS_Plastic3 = st.columns(3)
 
 col_PET_PO1, col_PET_PO2, col_PET_PO3 = st.columns(3)
 
@@ -267,61 +267,61 @@ def Tortendiagramm_erstellen(df):
     
     
 #Diagramme Plastic AS
-with col_ISO_MDI1:
-    balkendiagramm_ISO_MDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '11'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
+with col_Plastic_AS1:
+    balkendiagramm_Plastic_AS = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '11'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
 
     # Saeulendiagramm erstellen
-    fig_ISO_MDI = Saeulendiagramme_erstellen(balkendiagramm_ISO_MDI)
+    fig_Plastic_AS = Saeulendiagramme_erstellen(balkendiagramm_Plastic_AS)
 
     st.subheader("Absatz- und Umsatzentwicklung der Produktgruppe 2 Plastic AS")
-    st.plotly_chart(fig_ISO_MDI, use_container_width=True)
+    st.plotly_chart(fig_Plastic_AS, use_container_width=True)
 
-with col_ISO_MDI2:
-    liniendiagramm_ISO_MDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '11'").groupby(["Produktgruppe2", "Produktgruppe3", "Geschaeftsjahr"], as_index=False)[["Absatz"]].sum()
+with col_Plastic_AS2:
+    liniendiagramm_Plastic_AS = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '11'").groupby(["Produktgruppe2", "Produktgruppe3", "Geschaeftsjahr"], as_index=False)[["Absatz"]].sum()
 
-    fig_line_ISO_MDI = Liniendiagramme_erstellen(liniendiagramm_ISO_MDI)
+    fig_line_Plastic_AS = Liniendiagramme_erstellen(liniendiagramm_Plastic_AS)
     
     st.subheader("Absatzentwicklung der Produktgruppen 3 von Plastic AS")
-    st.plotly_chart(fig_line_ISO_MDI, use_container_width=True)
+    st.plotly_chart(fig_line_Plastic_AS, use_container_width=True)
 
-with col_ISO_MDI3:
-    pie_chart_regionen_ISO_MDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '11'").groupby(["Region_Kunde"], as_index=False)[["Absatz"]].sum()
+with col_Plastic_AS3:
+    pie_chart_regionen_Plastic_AS = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '11'").groupby(["Region_Kunde"], as_index=False)[["Absatz"]].sum()
 
-    fig_pie_ISO_MDI = Tortendiagramm_erstellen(pie_chart_regionen_ISO_MDI)
+    fig_pie_Plastic_AS = Tortendiagramm_erstellen(pie_chart_regionen_Plastic_AS)
 
 
     st.subheader("Absatzverteilung der Produktgruppe 2 Plastic AS pro Region")
-    st.plotly_chart(fig_pie_ISO_MDI, use_container_width=True)
+    st.plotly_chart(fig_pie_Plastic_AS, use_container_width=True)
 
 
 
 
 #Diagramme Plastic ABS_Plastic
-with col_ISO_TDI1:
-    balkendiagramm_ISO_TDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '21'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
+with col_Plastic_ABS_Plastic1:
+    balkendiagramm_Plastic_ABS_Plastic = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '21'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
 
-    fig_ISO_TDI = Saeulendiagramme_erstellen(balkendiagramm_ISO_TDI)
+    fig_Plastic_ABS_Plastic = Saeulendiagramme_erstellen(balkendiagramm_Plastic_ABS_Plastic)
 
     st.subheader("Absatz- und Umsatzentwicklung der Produktgruppe 2 Plastic ABS_Plastic")
-    st.plotly_chart(fig_ISO_TDI, use_container_width=True)
+    st.plotly_chart(fig_Plastic_ABS_Plastic, use_container_width=True)
 
 
-with col_ISO_TDI2:
-    liniendiagramm_ISO_TDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '21'").groupby(["Produktgruppe2", "Produktgruppe3", "Geschaeftsjahr"], as_index=False)[["Absatz"]].sum()
+with col_Plastic_ABS_Plastic2:
+    liniendiagramm_Plastic_ABS_Plastic = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '21'").groupby(["Produktgruppe2", "Produktgruppe3", "Geschaeftsjahr"], as_index=False)[["Absatz"]].sum()
 
-    fig_line_ISO_TDI = Liniendiagramme_erstellen(liniendiagramm_ISO_TDI)
+    fig_line_Plastic_ABS_Plastic = Liniendiagramme_erstellen(liniendiagramm_Plastic_ABS_Plastic)
     
     st.subheader("Absatzentwicklung der Produktgruppen 3 von Plastic ABS_Plastic")
-    st.plotly_chart(fig_line_ISO_TDI, use_container_width=True)
+    st.plotly_chart(fig_line_Plastic_ABS_Plastic, use_container_width=True)
 
-with col_ISO_TDI3:
-    pie_chart_regionen_ISO_TDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '21'").groupby(["Region_Kunde"], as_index=False)[["Absatz"]].sum()
+with col_Plastic_ABS_Plastic3:
+    pie_chart_regionen_Plastic_ABS_Plastic = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '21'").groupby(["Region_Kunde"], as_index=False)[["Absatz"]].sum()
 
-    fig_pie_ISO_TDI = Tortendiagramm_erstellen(pie_chart_regionen_ISO_TDI)
+    fig_pie_Plastic_ABS_Plastic = Tortendiagramm_erstellen(pie_chart_regionen_Plastic_ABS_Plastic)
 
 
     st.subheader("Absatzverteilung der Produktgruppe 2 Plastic ABS_Plastic pro Region")
-    st.plotly_chart(fig_pie_ISO_TDI, use_container_width=True)
+    st.plotly_chart(fig_pie_Plastic_ABS_Plastic, use_container_width=True)
 
 
 
