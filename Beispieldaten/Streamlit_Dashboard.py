@@ -139,10 +139,10 @@ buffer = io.BytesIO()
 
 filterkriterien = pd.DataFrame(data={
     "Filter": ["Produktgruppe 1", "Produktgruppe 2", "Geschäftsjahr", "Region", "Materialnummer", "Land Kunde"],
-    "Gesetzte Werte": [pg1, 
+    "Gesetzte Werte": [str(pg1), 
                        str(sorted(df_selection["Produktgruppe2"].unique(), reverse=False)), 
-                       jahr_gefiltert, 
-                       region,
+                       str(jahr_gefiltert), 
+                       str(region),
                        str(filter_material),
                        str(filter_country)]
 })
@@ -267,14 +267,14 @@ def Tortendiagramm_erstellen(df):
     return tortendiagramm
     
     
-#Diagramme ISO MDI
+#Diagramme Plastic AS
 with col_ISO_MDI1:
     balkendiagramm_ISO_MDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '11'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
 
     # Saeulendiagramm erstellen
     fig_ISO_MDI = Saeulendiagramme_erstellen(balkendiagramm_ISO_MDI)
 
-    st.subheader("Absatz- und Umsatzentwicklung ISO MDI Ebene PG2")
+    st.subheader("Absatz- und Umsatzentwicklung der Produktgruppe 2 Plastic AS")
     st.plotly_chart(fig_ISO_MDI, use_container_width=True)
 
 with col_ISO_MDI2:
@@ -282,7 +282,7 @@ with col_ISO_MDI2:
 
     fig_line_ISO_MDI = Liniendiagramme_erstellen(liniendiagramm_ISO_MDI)
     
-    st.subheader("Absatzentwicklung ISO MDI Ebene PG3")
+    st.subheader("Absatzentwicklung der Produktgruppen 3 von Plastic AS")
     st.plotly_chart(fig_line_ISO_MDI, use_container_width=True)
 
 with col_ISO_MDI3:
@@ -291,19 +291,19 @@ with col_ISO_MDI3:
     fig_pie_ISO_MDI = Tortendiagramm_erstellen(pie_chart_regionen_ISO_MDI)
 
 
-    st.subheader("Absatzverteilung ISO MDI Ebene PG2 pro Region")
+    st.subheader("Absatzverteilung der Produktgruppe 2 Plastic AS pro Region")
     st.plotly_chart(fig_pie_ISO_MDI, use_container_width=True)
 
 
 
 
-#Diagramme ISO TDI
+#Diagramme Plastic ABS_Plastic
 with col_ISO_TDI1:
     balkendiagramm_ISO_TDI = df_selection.query("Produktgruppe1 == '01' & Produktgruppe2 == '21'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
 
     fig_ISO_TDI = Saeulendiagramme_erstellen(balkendiagramm_ISO_TDI)
 
-    st.subheader("Absatz- und Umsatzentwicklung ISO TDI Ebene PG2")
+    st.subheader("Absatz- und Umsatzentwicklung der Produktgruppe 2 Plastic ABS_Plastic")
     st.plotly_chart(fig_ISO_TDI, use_container_width=True)
 
 
@@ -312,7 +312,7 @@ with col_ISO_TDI2:
 
     fig_line_ISO_TDI = Liniendiagramme_erstellen(liniendiagramm_ISO_TDI)
     
-    st.subheader("Absatzentwicklung ISO TDI Ebene PG3")
+    st.subheader("Absatzentwicklung der Produktgruppen 3 von Plastic ABS_Plastic")
     st.plotly_chart(fig_line_ISO_TDI, use_container_width=True)
 
 with col_ISO_TDI3:
@@ -321,7 +321,7 @@ with col_ISO_TDI3:
     fig_pie_ISO_TDI = Tortendiagramm_erstellen(pie_chart_regionen_ISO_TDI)
 
 
-    st.subheader("Absatzverteilung ISO TDI Ebene PG2 pro Region")
+    st.subheader("Absatzverteilung der Produktgruppe 2 Plastic ABS_Plastic pro Region")
     st.plotly_chart(fig_pie_ISO_TDI, use_container_width=True)
 
 
@@ -329,13 +329,13 @@ with col_ISO_TDI3:
 
 
 
-#Diagramme PET PO
+#Diagramme PET Propylenoxid
 with col_PET_PO1:
     balkendiagramm_PET_PO = df_selection.query("Produktgruppe1 == '04' & Produktgruppe2 == '41'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
 
     fig_PET_PO = Saeulendiagramme_erstellen(balkendiagramm_PET_PO)
 
-    st.subheader("Absatz- und Umsatzentwicklung PET PO Ebene PG2")
+    st.subheader("Absatz- und Umsatzentwicklung der Produktgruppe 2 PET Propylenoxid")
     st.plotly_chart(fig_PET_PO, use_container_width=True)
 
 
@@ -344,7 +344,7 @@ with col_PET_PO2:
 
     fig_line_PET_PO = Liniendiagramme_erstellen(liniendiagramm_PET_PO)
     
-    st.subheader("Absatzentwicklung PET PO Ebene PG3")
+    st.subheader("Absatzentwicklung der Produktgruppen 3 von PET Propylenoxid")
     st.plotly_chart(fig_line_PET_PO, use_container_width=True)
 
 with col_PET_PO3:
@@ -353,7 +353,7 @@ with col_PET_PO3:
     fig_pie_PET_PO = Tortendiagramm_erstellen(pie_chart_regionen_PET_PO)
 
 
-    st.subheader("Absatzverteilung PET PO Ebene PG2 pro Region")
+    st.subheader("Absatzverteilung der Produktgruppe 2 PET Propylenoxid pro Region")
     st.plotly_chart(fig_pie_PET_PO, use_container_width=True)
 
 
@@ -367,7 +367,7 @@ with col_PET_HP1:
     # Balkendiagramm erstellen
     fig_PET_HP = Saeulendiagramme_erstellen(balkendiagramm_PET_HP)
 
-    st.subheader("Absatz- und Umsatzentwicklung PET HighPerformance Ebene PG2")
+    st.subheader("Absatz- und Umsatzentwicklung der Produktgruppe 2 PET HighPerformance")
     st.plotly_chart(fig_PET_HP, use_container_width=True)
 
 with col_PET_HP2:
@@ -375,7 +375,7 @@ with col_PET_HP2:
 
     fig_line_PET_HP = Liniendiagramme_erstellen(liniendiagramm_PET_HP)
     
-    st.subheader("Absatzentwicklung PET HighPerformance Ebene PG3")
+    st.subheader("Absatzentwicklung der Produktgruppen 3 von PET HighPerformance")
     st.plotly_chart(fig_line_PET_HP, use_container_width=True)
 
 with col_PET_HP3:
@@ -384,19 +384,18 @@ with col_PET_HP3:
     fig_pie_PET_HP = Tortendiagramm_erstellen(pie_chart_regionen_PET_HP)
 
 
-    st.subheader("Absatzverteilung PET HighPerformance Ebene PG2 pro Region")
+    st.subheader("Absatzverteilung der Produktgruppe 2 PET HighPerformance pro Region")
     st.plotly_chart(fig_pie_PET_HP, use_container_width=True)
 
 
 
 
 #Diagramme PET Special-PETs
-
 with col_PET_Special1:
     balkendiagramm_PET_Special = df_selection.query("Produktgruppe1 == '04' & Produktgruppe2 == '49'").groupby(["Produktgruppe2", "Geschaeftsjahr"], as_index=False)[["Absatz", "Umsatz"]].sum()
     fig_PET_Special = Saeulendiagramme_erstellen(balkendiagramm_PET_Special)
 
-    st.subheader("Absatz- und Umsatzentwicklung PET Special-PET Ebene PG2")
+    st.subheader("Absatz- und Umsatzentwicklung der Produktgruppe 2 PET Special-PET")
     st.plotly_chart(fig_PET_Special, use_container_width=True)
 
 
@@ -405,7 +404,7 @@ with col_PET_Special2:
 
     fig_line_PET_Special = Liniendiagramme_erstellen(liniendiagramm_PET_Special)
     
-    st.subheader("Absatzentwicklung PET Special-PET Ebene PG3")
+    st.subheader("Absatzentwicklung der Produktgruppen 3 von PET Special-PET")
     st.plotly_chart(fig_line_PET_Special, use_container_width=True)
 
 with col_PET_Special3:
@@ -414,7 +413,7 @@ with col_PET_Special3:
     fig_pie_PET_Special = Tortendiagramm_erstellen(pie_chart_regionen_PET_Special)
 
 
-    st.subheader("Absatzverteilung PET Special-PET Ebene PG2 pro Region")
+    st.subheader("Absatzverteilung der Produktgruppe 2 PET Special-PET pro Region")
     st.plotly_chart(fig_pie_PET_Special, use_container_width=True)
 
 #%%
