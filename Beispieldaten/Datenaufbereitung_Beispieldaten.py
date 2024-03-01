@@ -30,6 +30,9 @@ df_vorbereitet = df
 df_vorbereitet.loc[:, "Absatz":"Deckungsbeitrag"] = df_vorbereitet.loc[:, "Absatz":"Deckungsbeitrag"].fillna(0)
 #%%
 
+#Platzhalter Schritt 4: Im Orginalskript erfolgen hier die ABC-Analyse und die Klassifizierung des Deckungsbeitrages.
+#Die Ergebnisse werden in das Dataframe result_df geschrieben. Da dieser Schritt hier ausbleibt, wird lediglich df_vorbereitet in result_df geschrieben.
+
 result_df = df_vorbereitet
 
 # ---- Formattierungen am Ende vornehmen ----

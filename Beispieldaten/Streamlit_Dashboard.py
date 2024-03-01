@@ -59,38 +59,48 @@ st.markdown("---")
 
 
 #%%
-# ---- SIDEBAR ----
+# ---- SIDEBAR erstellen ----
+#Die Sidebar- und Eingabefilter werden als erstes erstellt, damit mit diesen Filter das df_selection erstellt werden kann.
 st.sidebar.header("Bitte Hier Filtern:")
+
+#Auswahlfilter für Produktgruppe 1 erstellen
+#Elemente sind die Produktgruppen in der Spalte Produktgruppe1
 pg1 = st.sidebar.multiselect(
     "Produktgruppe 1 wählen",
     options=sorted(working_data["Produktgruppe1"].unique(), reverse=False),
     default=sorted(working_data["Produktgruppe1"].unique(), reverse=False)
 )
 
+#Auswahlfilter für Produktgruppe 2 erstellen
+#Elemente sind die Produktgruppen in der Spalte Produktgruppe2
 pg2 = st.sidebar.multiselect(
     "Produktgruppe 2 wählen",
     options=sorted(working_data["Produktgruppe2"].unique(), reverse=False),
     default=sorted(working_data["Produktgruppe2"].unique(), reverse=False)
 )
 
+#Auswahlfilter für Geschaeftsjahr erstellen
+#Elemente sind die Geschaeftsjahre in der Spalte Geschaeftsjahre
 jahr_gefiltert = st.sidebar.multiselect(
-    "Bitte Geschäftsjahr wählen:",
+    "Bitte Jahr wählen:",
     options=sorted(working_data["Geschaeftsjahr"].unique(), reverse=True),
     default=sorted(working_data["Geschaeftsjahr"].unique(), reverse=True)[:3]
 )
 
-
+#Auswahlfilter für Region erstellen
+#Elemente sind die Regionen in der Spalte Region
 region = st.sidebar.multiselect(
     "Bitte Region wählen:",
     options=sorted(working_data["Region_Kunde"].unique(), reverse=False),
     default=sorted(working_data["Region_Kunde"].unique(), reverse=False)
 )
 
+#das Dataframe entsprechend filtern
 df_selection =working_data.query(
     "Produktgruppe1 == @pg1 & Produktgruppe2 == @pg2 & Geschaeftsjahr == @jahr_gefiltert & Region_Kunde == @region"
 )
 
-#Spalten Container fuer subheader
+#Spalten Container für subheader
 st.subheader("Materialübersicht")
 
 #Spalten-Container einfuegen
@@ -102,13 +112,15 @@ with left_column:
 with right_column:
     filter_country = st.text_input('Bitte vollständigen Landesnamen eingeben:')
 
+#Filter nur berücksichtigen, wenn in die Textfelder etwas eingegeben wurde. Sonst enthalten die Filter als Wert None
+#und ein leeres Dataframe wäre die Folge
 if filter_material:
     df_selection = df_selection[df_selection['Materialnummer'].str.contains(filter_material)]
 
 if filter_country:
     df_selection = df_selection[df_selection['Land_Kunde'] == filter_country]
 
-
+#Dataframe als Tabelle in Streamlit darstellen und die Spalten Geschaeftsjahr, Kundennummer, Absatz, Umsatz und Deckungsbeitrag als Integer darstellen
 st.dataframe(
     df_selection,
     column_config={
@@ -134,9 +146,12 @@ st.dataframe(
 
 #%%
 
+# ---- Dpwnloadbutton erstellen ----
 col1, col2 = st.columns([0.9,0.1])
+#Puffer in Arbeitsspeicher für Excel-Datei vorhalten
 buffer = io.BytesIO()
 
+#Dataframe Filterkriterien erstellen - enthält die ausgewählten Filterkriterien, welche in der Excel-Tabelle in den Spalten A und B eingefügt werden
 filterkriterien = pd.DataFrame(data={
     "Filter": ["Produktgruppe 1", "Produktgruppe 2", "Geschäftsjahr", "Region", "Materialnummer", "Land Kunde"],
     "Gesetzte Werte": [str(pg1), 
@@ -147,31 +162,32 @@ filterkriterien = pd.DataFrame(data={
                        str(filter_country)]
 })
 
+#Falls ein Filterkriterium nicht ausgewählt wurde, bspw. keine Materialnummer speziell gesucht wird, soll "-" in der Zelle stehen
 i = 0
 while(i < len(filterkriterien)):
     if(filterkriterien.iloc[i, 1]== ""):
         filterkriterien.iloc[i, 1] = "-"
     i = i+1
 
-# Create a Pandas Excel writer using XlsxWriter as the engine.
+#Einen Pandas Excel-Writer mit XlsxWriter als Engine erstellen
 with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
 
-    #Convert the dataframe to an XlsxWriter Excel object
+    #Dataframes in XlsxWriter-Objekte konvertieren
     filterkriterien.to_excel(writer, sheet_name='Tabelle1', startrow=0, index=False)
     df_selection.to_excel(writer, sheet_name='Tabelle1', startrow=len(filterkriterien)+3, index=False)
 
-    # Get the xlsxwriter objects from the dataframe writer object
-    #The Workbook and Worksheet objects can be used to access other XlsxWriter feature
+    #Aus den xlsxwriter-Objekten das workbook und Tabellenblatt "Tabelle1" extrahieren
     workbook = writer.book
     worksheet = writer.sheets["Tabelle1"]
 
-    #get dimensions of dataframe
+    #Länge und Breite des df_selection in die Variablen max_row und max_col schreiben
+    #werden im add_table()-Befehl verwendet
     (max_row, max_col) = df_selection.shape
 
-    #create list of column-headers to use in add_table()
+    #Liste mit Überschriften erstellen, welche in add_table() verwendet werden können
     column_settings = [{"header": column} for column in df_selection.columns]
 
-    #add excel table structure. Pandas will add the data
+    #das Dataframe df_selection als Tabelle darstellen
     #Aufbau des add_table()-Befehls: Startzeile, Startspalte, Endzeile, Endspalte
     worksheet.add_table(len(filterkriterien)+3,0, max_row+len(filterkriterien)+3, max_col-1, {"columns": column_settings,
                                                                                               "style": 'Table Style Light 1'})
@@ -186,15 +202,16 @@ with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
         worksheet.write(i+1, 1, filterkriterien.iloc[i,1], rahmenlinien)
         i = i+1
 
-
+    #alle Gridlines ausschalten
     worksheet.hide_gridlines(2)
 
+    #automatische Spaltenbreiten anpassen
     worksheet.autofit()
 
 
 
 
-
+#Downloadbutton einfügen, welcher die Excel-Datei aus dem RAM-Puffer verwendet
 with col2:
     st.download_button(
         label=":inbox_tray: Download Excel-Arbeitsmappe",
@@ -206,6 +223,7 @@ with col2:
 
 st.markdown("---")
 
+#Spaltencontainer für die Diagramme der jeweiligen Produktgruppen einfügen
 col_Plastic_AS1, col_Plastic_AS2, col_Plastic_AS3 = st.columns(3)
 
 col_Plastic_ABS_Plastic1, col_Plastic_ABS_Plastic2, col_Plastic_ABS_Plastic3 = st.columns(3)
@@ -216,7 +234,7 @@ col_PET_HP1, col_PET_HP2, col_PET_HP3 = st.columns(3)
 
 col_PET_Special1, col_PET_Special2, col_PET_Special3 = st.columns(3)
 
-
+#Farben für Säulendiagramm manuell festlegen
 color_absatz = '#9ecae1'  # Hellblau
 color_umsatz = '#fdae61'  # Pfirsich
 
@@ -260,7 +278,6 @@ def Tortendiagramm_erstellen(df):
     tortendiagramm = px.pie(labels=df["Region_Kunde"], 
                                     values=df["Absatz"], 
                                     names=df["Region_Kunde"],
-                                    #color=['#9ecae1', '#fdae61', '#a1d99b', '#ffe34d', '#d73027']
                 )
     
     return tortendiagramm
@@ -414,5 +431,3 @@ with col_PET_Special3:
 
     st.subheader("Absatzverteilung der Produktgruppe 2 PET Special-PET pro Region")
     st.plotly_chart(fig_pie_PET_Special, use_container_width=True)
-
-#%%
