@@ -40,7 +40,7 @@ if not check_password():
 
 
 # ---- Input-Data einlesen ----
-input_data = pd.read_feather("C:/Webtechnologie_23_24/Beispieldaten/Input_Beispieldaten2.feather")
+input_data = pd.read_feather("C:/Webtechnologie_23_24/Beispieldaten/Input_Beispieldaten.feather")
 
 working_data = input_data
 
