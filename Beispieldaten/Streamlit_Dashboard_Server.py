@@ -153,17 +153,12 @@ while(i < len(filterkriterien)):
     i = i+1
 
 
-@st.cache_data
-def convert_df_df_selection(df, start_row):
-    return df.to_excel(writer, sheet_name='Tabelle1', startrow=start_row, index=False)
-
-
 # Create a Pandas Excel writer using XlsxWriter as the engine.
 with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
 
     #Convert the dataframe to an XlsxWriter Excel object
     filterkriterien.to_excel(writer, sheet_name='Tabelle1', startrow=0, index=False)
-    convert_df_df_selection(df_selection, len(filterkriterien)+3)
+    df_selection.to_excel(writer, sheet_name='Tabelle1', startrow=len(filterkriterien)+3, index=False)
 
     # Get the xlsxwriter objects from the dataframe writer object
     #The Workbook and Worksheet objects can be used to access other XlsxWriter feature
