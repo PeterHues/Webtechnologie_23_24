@@ -207,7 +207,7 @@ with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
 
 with col2:
     st.download_button(
-        label=":inbox_tray: Download Excel workbook",
+        label=":inbox_tray: Download Excel-Arbeitsmappe",
         data=buffer,
         file_name="Absatzdaten.xlsx",
         mime="application/vnd.ms-excel",
