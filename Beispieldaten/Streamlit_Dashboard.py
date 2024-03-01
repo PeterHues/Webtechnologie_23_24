@@ -40,7 +40,7 @@ if not check_password():
 
 
 # ---- Input-Data einlesen ----
-input_data = pd.read_feather("C:/Webtechnologie_23_24/Beispieldaten/Input_Beispieldaten.feather")
+input_data = pd.read_feather("C:/Webtechnologie_23_24/Beispieldaten/Input_Beispieldaten2.feather")
 
 working_data = input_data
 
@@ -153,26 +153,16 @@ while(i < len(filterkriterien)):
         filterkriterien.iloc[i, 1] = "-"
     i = i+1
 
-@st.cache_data
-def convert_df_df_selection(df, start_row):
-    return df.to_excel(writer, sheet_name='Tabelle1', startrow=start_row, index=False)
-
-
 # Create a Pandas Excel writer using XlsxWriter as the engine.
 with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
 
     #Convert the dataframe to an XlsxWriter Excel object
     filterkriterien.to_excel(writer, sheet_name='Tabelle1', startrow=0, index=False)
-    convert_df_df_selection(df_selection, len(filterkriterien)+3)
-    
-    #filterkriterien.to_excel(writer, sheet_name='Tabelle1', startrow=0, index=False)
-    #Convert the dataframe to an XlsxWriter Excel object
-    #df_selection.to_excel(writer, sheet_name='Tabelle1', startrow=len(filterkriterien)+3, index=False)
+    df_selection.to_excel(writer, sheet_name='Tabelle1', startrow=len(filterkriterien)+3, index=False)
 
     # Get the xlsxwriter objects from the dataframe writer object
     #The Workbook and Worksheet objects can be used to access other XlsxWriter feature
     workbook = writer.book
-    #worksheet = writer.sheets["Tabelle1"]
     worksheet = writer.sheets["Tabelle1"]
 
     #get dimensions of dataframe

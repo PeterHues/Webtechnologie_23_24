@@ -1,2 +1,4 @@
 cd C:\Webtechnologie_23_24\Beispieldaten
 streamlit run Streamlit_Dashboard.py
+
+streamlit run "Streamlit_Dashboard copy.py"
